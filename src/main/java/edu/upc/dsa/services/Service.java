@@ -1,8 +1,8 @@
 package edu.upc.dsa.services;
 
-import edu.upc.dsa.Manager;
-import edu.upc.dsa.ManagerImpl;
-import edu.upc.dsa.models.Objeto;
+import edu.upc.dsa.Covid19Manager;
+import edu.upc.dsa.Covid19ManagerImpl;
+import edu.upc.dsa.models.Persona;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -17,43 +17,33 @@ import java.util.List;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Api(value = "/objects", description = "Endpoint to Text Service")
-@Path("/objects")
+@Api(value = "/user", description = "Endpoint to Text Service")
+@Path("/user")
 public class Service {
-    private Manager m;
+    private Covid19Manager m;
 
     // Constructor servicio: inicializar instancia + añadir objetos (parecido test)
     public Service() {
 
-        this.m = ManagerImpl.getInstance();
-        String idProducto1;
-        String idProducto2;
-        String idProducto3;
-        idProducto1=this.m.añadirObjeto("cafe", 1.25);
-        idProducto2=this.m.añadirObjeto("cortado", 1.50);
-        idProducto3=this.m.añadirObjeto("te", 1.00);
+        this.m = Covid19ManagerImpl.getInstance();
+        this.m.AñadirPersona("1", "Mickey", "Mouse", 20, "A");
+        this.m.AñadirPersona("2", "Donald", "Duck", 25, "C");
+
     }
 
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
-     */
-
     @GET
-    @ApiOperation(value = "Retorna productos ordenados", notes = "asaf")
+    @ApiOperation(value = "Crea nuevo usuario en el sistema", notes = "a")
     @ApiResponses(value = {
             // Respuesta tiene que ser del tipo que nos piden
-            @ApiResponse(code = 201, message = "Successful", response = Objeto.class, responseContainer="List"),
+            @ApiResponse(code = 201, message = "Successful", response = Boolean.class),
     })
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProducts() {
+    public Response añadirPersona() {
         // Hacer lo que pide la función
-        List<Objeto> objetos = this.m.listarObjetosPorAlgo();
+        Boolean respuesta = this.m.AñadirPersona("3", "Miguel", "Marin", 20, "C");
         // Meter en JSON lo que nos piden
-        GenericEntity<List<Objeto>> entity = new GenericEntity<List<Objeto>>(objetos) {};
+        GenericEntity<Boolean> entity = new GenericEntity<Boolean>(respuesta) {};
         // Retornar respuesta
         return Response.status(201).entity(entity).build() ;
 
